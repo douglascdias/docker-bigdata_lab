@@ -1,0 +1,12 @@
+{
+  "shell_port": 41097,
+  "iopub_port": 60125,
+  "stdin_port": 58481,
+  "control_port": 58411,
+  "hb_port": 52243,
+  "ip": "127.0.0.1",
+  "key": "728ded90-d82f19c75b1c232e5ab831bf",
+  "transport": "tcp",
+  "signature_scheme": "hmac-sha256",
+  "kernel_name": "spylon-kernel"
+}
