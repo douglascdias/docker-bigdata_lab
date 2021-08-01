@@ -20,7 +20,7 @@ Ambiente para estudo dos principais frameworks big data em docker.
         ex: /home/user/docker
 
 ### No terminal, no diretorio docker-bigdata_lab, executar o docker-compose
-          docker-compose up -d        
+          docker-compose up -d
 
 ### Verificar imagens e containers
          docker image ls
@@ -53,6 +53,9 @@ Ambiente para estudo dos principais frameworks big data em docker.
 
 ### Acessar log do container
          docker container logs [nome do container] 
+
+### Copiar dados de um container para um diretório local
+         docker cp <container>:<dir-dest> <dir-local>  
 
 ## Acesso WebUI dos Frameworks
  

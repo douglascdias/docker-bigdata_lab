@@ -23,6 +23,7 @@ services:
       SERVICE_PRECONDITION: "namenode:50070"
     ports:
       - "50075:50075"
+
 #HIVE
   hive-server:
     image: bde2020/hive:2.3.2-postgresql-metastore
@@ -64,6 +65,7 @@ services:
       - ./postgres.env
     ports:
       - "5433:5432"
+
 #HUE
   hue:
     image: gethue/hue:latest
@@ -81,68 +83,6 @@ services:
         limits:
           memory: 500m
 
-#docker exec -it spark-master /spark/bin/spark-shell --master spark://spark-master:7077
-  # spark-master:
-  #   image: bde2020/spark-master:3.0.2-hadoop3.2
-  #   container_name: spark-master
-  #   ports:
-  #     - "8080:8080"
-  #     - "7077:7077"
-  #     - "4040:4040"
-  #   volumes:
-  #     - shared_data:/data
-  #     - ./data/spark/conf:/spark/conf
-  #   environment:
-  #     - INIT_DAEMON_STEP=setup_spark
-  #     # - "constraint:node==<yourmasternode>"
-  #   depends_on:
-  #     - namenode
-  #     - datanode
-  #   deploy:
-  #     resources:
-  #       limits:
-  #         memory: 500m
-
-  # spark-worker-1:
-  #   image: bde2020/spark-worker:3.0.2-hadoop3.2
-  #   container_name: spark-worker-1
-  #   depends_on:
-  #     - spark-master
-  #     - namenode
-  #     - datanode
-  #   ports:
-  #     - "8081:8081"
-  #   volumes: 
-  #     - shared_data:/data
-  #     - ./data/spark/conf:/spark/conf
-  #   environment:
-  #     - "SPARK_MASTER=spark://spark-master:7077"
-  #     # - "constraint:node==<yourworkernode>"
-  #   deploy:
-  #     resources:
-  #       limits:
-  #         memory: 500m
-
-  # spark-worker-2:
-  #   image: bde2020/spark-worker:3.0.2-hadoop3.2
-  #   container_name: spark-worker-2
-  #   depends_on:
-  #     - spark-master
-  #     - namenode
-  #     - datanode
-  #   ports:
-  #     - "8082:8081"
-  #   volumes: 
-  #     - shared_data:/data
-  #     - ./data/spark/conf:/spark/conf
-  #   environment:
-  #     - "SPARK_MASTER=spark://spark-master:7077"
-  #     # - "constraint:node==<yourworkernode>"
-  #   deploy:
-  #     resources:
-  #       limits:
-  #         memory: 500m
-
 #NOTEBOOK / SPARK
   spark-notebook:
     image: jupyter/all-spark-notebook
@@ -155,10 +95,10 @@ services:
       - "SPARK_MASTER=spark://spark-master:7077"
     env_file:
       - ./jupyter.env
-    volumes:
-      - ./data/spark/conf:/usr/local/spark/conf  
-      - ./data/notebooks:/home/jovyan
-      - ./data/dataset:/dataset
+    # volumes:
+    #   - ./data/spark/conf:/usr/local/spark/conf  
+    #   - ./data/notebooks:/home/jovyan
+    #   - ./data/dataset:/dataset
     ports:
       - 8889:8888
       - 4049:4040
@@ -195,8 +135,6 @@ services:
       SERVICE_PRECONDITION: "namenode:50070 datanode:50075 zoo:2181 hbase-master:16010"
     ports:
       - 16030:16030
-
-
 
 volumes:
   shared_data:
