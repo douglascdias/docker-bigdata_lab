@@ -88,17 +88,16 @@ services:
     image: jupyter/all-spark-notebook
     container_name: spark-notebook
     depends_on:
-      # - spark-master
       - namenode
       - datanode
     environment:
       - "SPARK_MASTER=spark://spark-master:7077"
     env_file:
       - ./jupyter.env
-    # volumes:
-    #   - ./data/spark/conf:/usr/local/spark/conf  
-    #   - ./data/notebooks:/home/jovyan
-    #   - ./data/dataset:/dataset
+    volumes:
+      - ./data/spark/conf:/usr/local/spark/conf  
+      - ./data/notebooks:/home/jovyan
+      - ./data/dataset:/dataset
     ports:
       - 8889:8888
       - 4049:4040
@@ -117,6 +116,10 @@ services:
     image: bde2020/hbase-master:1.0.0-hbase1.2.6
     container_name: hbase-master
     hostname: hbase-master
+    depends_on:
+      - namenode
+      - datanode
+      - zoo
     env_file:
       - ./hbase-distributed-local.env
     environment:
@@ -128,6 +131,11 @@ services:
     image: bde2020/hbase-regionserver:1.0.0-hbase1.2.6
     container_name: hbase-regionserver
     hostname: hbase-regionserver
+    depends_on:
+      - namenode
+      - datanode
+      - zoo
+      - hbase-master
     env_file:
       - ./hbase-distributed-local.env
     environment:
@@ -138,5 +146,3 @@ services:
 
 volumes:
   shared_data:
-  # namenode:
-  # datanode:
