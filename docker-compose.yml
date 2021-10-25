@@ -9,7 +9,7 @@ services:
     environment:
       - CLUSTER_NAME=test
     env_file:
-      - ./conf/hadoop-hive.env
+      - ./data/conf/hadoop-hive.env
     ports:
       - "50070:50070"
   datanode:
@@ -18,7 +18,7 @@ services:
     volumes:
       - ./data/hdfs/datanode:/hadoop/dfs/data
     env_file:
-      - ./conf/hadoop-hive.env
+      - ./data/conf/hadoop-hive.env
     environment:
       SERVICE_PRECONDITION: "namenode:50070"
     ports:
@@ -29,7 +29,7 @@ services:
     image: bde2020/hive:2.3.2-postgresql-metastore
     container_name: hive_server
     env_file:
-      - ./conf/hadoop-hive.env
+      - ./data/conf/hadoop-hive.env
     environment:
       HIVE_CORE_CONF_javax_jdo_option_ConnectionURL: "jdbc:postgresql://hive-metastore/metastore"
       SERVICE_PRECONDITION: "hive-metastore:9083"
@@ -40,7 +40,7 @@ services:
     container_name: hive_metastore
     hostname: hive_metastore
     env_file:
-      - ./conf/hadoop-hive.env
+      - ./data/conf/hadoop-hive.env
     command: /opt/hive/bin/hive --service metastore
     environment:
       SERVICE_PRECONDITION: "namenode:50070 datanode:50075 hive-metastore-postgresql:5432"
@@ -62,7 +62,7 @@ services:
     volumes:
       - ./data/postgres/data:/var/lib/postgresql/data
     env_file:do
-      - ./conf/postgres.env
+      - ./data/conf/postgres.env
     ports:
       - "5433:5432"
 
@@ -77,7 +77,7 @@ services:
     depends_on:
       - postgres
     volumes:
-      - ./conf/hue.ini:/usr/share/hue/desktop/conf/z-hue.ini
+      - ./data/conf/hue.ini:/usr/share/hue/desktop/conf/z-hue.ini
     deploy:
       resources:
         limits:
@@ -100,7 +100,7 @@ services:
       - namenode
       - datanode
     env_file:
-      - ./conf/jupyter.env
+      - ./data/conf/jupyter.env
 
   spark-worker-1:
     image: bde2020/spark-worker:3.0.2-hadoop3.2
@@ -116,7 +116,7 @@ services:
     environment:
       - "SPARK_MASTER=spark://spark-master:7077"
     env_file:
-      - ./conf/jupyter.env
+      - ./data/conf/jupyter.env
 
   spark-worker-2:
     image: bde2020/spark-worker:3.0.2-hadoop3.2
@@ -132,7 +132,7 @@ services:
     environment:
       - "SPARK_MASTER=spark://spark-master:7077"
     env_file:
-      - ./conf/jupyter.env
+      - ./data/conf/jupyter.env
 
 #NOTEBOOK / SPARK
   spark-notebook:
@@ -171,7 +171,7 @@ services:
       - datanode
       - zoo
     env_file:
-      - ./conf/hbase-distributed-local.env
+      - ./data/conf/hbase-distributed-local.env
     environment:
       SERVICE_PRECONDITION: "namenode:50070 datanode:50075 zoo:2181"
     ports:
@@ -187,7 +187,7 @@ services:
       - zoo
       - hbase-master
     env_file:
-      - ./conf/hbase-distributed-local.env
+      - ./data/conf/hbase-distributed-local.env
     environment:
       HBASE_CONF_hbase_regionserver_hostname: hbase-region
       SERVICE_PRECONDITION: "namenode:50070 datanode:50075 zoo:2181 hbase-master:16010"
