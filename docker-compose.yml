@@ -61,7 +61,7 @@ services:
     container_name: postgres
     volumes:
       - ./data/postgres/data:/var/lib/postgresql/data
-    env_file:
+    env_file:do
       - ./conf/postgres.env
     ports:
       - "5433:5432"
